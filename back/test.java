@@ -112,6 +112,6 @@ public class test {
 	}
 	
 	public void organize(String pathInput) {
-		
+		System.out.println(f.getParent() + '/');
 	}
 }
