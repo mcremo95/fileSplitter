@@ -1,13 +1,13 @@
 package back;
 
-import graphic.logFrame;
+import graphic.homePanel;
 
 public class myR implements Runnable{
 
 	private int id;
-	private logFrame lf;
+	private homePanel lf;
 
-	public myR(int i, logFrame mf) {
+	public myR(int i, homePanel mf) {
 		this.id = i;
 		this.lf = mf;
 	}

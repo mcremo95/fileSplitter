@@ -18,10 +18,12 @@ public class MyTableModel extends AbstractTableModel{
 	}
 
 	public int getColumnCount() { return colName.length; }
+	
 	public int getRowCount() { 
 		if(v == null) return 1;
 		else return v.size(); 
 	}
+	
 	public boolean IsCellEditable(int row, int col) {
 		if(col == 3) { return true;	}
 		else {	return false;	}

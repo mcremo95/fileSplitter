@@ -12,12 +12,14 @@ public class homeFrame{
 		hp = new homePanel();
 
 		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		jf.setSize(300,300);
+		jf.setSize(600,600);
 
 		jf.add(hp);
-
 		jf.pack();
 		jf.setVisible(true);
 	}
 
+	public homePanel getHp() {
+		return hp;
+	}
 }

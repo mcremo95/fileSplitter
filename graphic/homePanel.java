@@ -16,6 +16,7 @@ import back.Queue;
 import back.Element;
 
 public class homePanel extends JPanel implements ActionListener{
+	
 	private JTable jt;
 	private TableModel tm;
 	private JScrollPane spt,spl;
@@ -23,7 +24,7 @@ public class homePanel extends JPanel implements ActionListener{
 	private JButton addB, removeB;
 	private JFileChooser fc;
 	private Queue q;
-	private JTextArea log;
+	private static JTextArea log;
 	private final static String nl = "\n";
 
 	public homePanel() {
@@ -34,16 +35,14 @@ public class homePanel extends JPanel implements ActionListener{
 		tm = new MyTableModel(q);
 		jt = new JTable(tm);
 		bp = new JPanel();
-		log = new JTextArea("log", 20, 20);
+		log = new JTextArea("log" + nl, 10, 10);
 		log.setEditable(false);
+		
 		spt = new JScrollPane(jt);
 		spl = new JScrollPane(log);
 		
 		fc = new JFileChooser();
 		
-		jt.setRowSelectionAllowed(true);
-		jt.setColumnSelectionAllowed(false);
-
 		jt.setRowSelectionAllowed(true);
 		jt.setColumnSelectionAllowed(false);
 
@@ -56,7 +55,7 @@ public class homePanel extends JPanel implements ActionListener{
 		bp.add(removeB);
 
 		this.add(spt, BorderLayout.PAGE_START);
-		this.add(spl, BorderLayout.PAGE_END);
+		this.add(spl, BorderLayout.CENTER);
 		this.add(bp, BorderLayout.PAGE_END);
 
 	}
@@ -65,6 +64,7 @@ public class homePanel extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == addB) {
 			int returnVal = fc.showDialog(homePanel.this, "Add");
+			print("Clicked add" + nl);
 			if(returnVal == JFileChooser.APPROVE_OPTION) {
 				File file = fc.getSelectedFile();
 				MyTableModel model = (MyTableModel)jt.getModel();
@@ -74,6 +74,7 @@ public class homePanel extends JPanel implements ActionListener{
 
 		else if (e.getSource() == removeB) {
 			int r = jt.getSelectedRow();
+			print("Clicked remove" + nl);
 			if(r !=- 1) {
 				MyTableModel model = (MyTableModel)jt.getModel();
 				q.Dequeue(r);
@@ -83,5 +84,10 @@ public class homePanel extends JPanel implements ActionListener{
 				log.append("Nessun file selezionato" + nl);
 			}
 		}
+	}
+	
+	public void print(String str) {
+		log.append(str + nl);
+		log.setCaretPosition(log.getDocument().getLength());
 	}
 }
