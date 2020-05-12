@@ -14,9 +14,6 @@ public class myR implements Runnable{
 
 	public void run() {
 		String str = "-Thread n:" + this.id;
-
-		synchronized(lf) {
-			lf.print(str);
-		}
+		
 	}
 }

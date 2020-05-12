@@ -28,7 +28,14 @@ public class Splitter {
 		this.resto = f.length()%parti;
 	}
 	
+	/**
+	 * 
+	 * @param path il path del file su cui lavorare
+	 * @param mode se true splitta se è false unsplitta
+	 * @param p le parti in cui dividere
+	 */
 	public Splitter(String path, boolean mode, int p) {
+		
 		this.pathIn = path;
 		this.f = new File(pathIn);
 		this.pathOut = f.getParent();
@@ -46,7 +53,12 @@ public class Splitter {
 		else { unsplit(); }
 	}
 	
+	/**
+	 * @param path il path del file su cui lavorare
+	 * @param mode se true splitta se è false unsplitta
+	 */
 	public Splitter(String path, boolean mode) {
+		
 		this.pathIn = path;
 		this.f = new File(pathIn);
 		this.pathOut = f.getParent();
@@ -77,7 +89,7 @@ public class Splitter {
 			for(int i = 1; i <= parti; i++) {
 
 				pathOut = f.getAbsolutePath() + ".par" + i;
-				System.out.println("pathOut " + pathOut);
+				System.out.println("splitto la parte n:" + 1 + "del file" + f.getName());
 				fout = new FileOutputStream(pathOut);
 				out = new BufferedOutputStream(fout);
 				

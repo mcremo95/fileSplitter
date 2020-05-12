@@ -11,6 +11,7 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.table.TableModel;
 import java.io.File;
+import back.Splitter;
 
 import back.Queue;
 import back.Element;
@@ -21,9 +22,10 @@ public class homePanel extends JPanel implements ActionListener{
 	private TableModel tm;
 	private JScrollPane spt,spl;
 	private JPanel bp;
-	private JButton addB, removeB;
+	private JButton addB, removeB, startB;
 	private JFileChooser fc;
 	private Queue q;
+	private Splitter split;
 	private static JTextArea log;
 	private final static String nl = "\n";
 
@@ -50,9 +52,12 @@ public class homePanel extends JPanel implements ActionListener{
 		addB.addActionListener(this);
 		removeB = new JButton("Rimuovi");
 		removeB.addActionListener(this);
+		startB = new JButton("Start");
+		startB.addActionListener(this);
 
 		bp.add(addB);
 		bp.add(removeB);
+		bp.add(startB);
 
 		this.add(spt, BorderLayout.PAGE_START);
 		this.add(spl, BorderLayout.CENTER);
@@ -84,10 +89,45 @@ public class homePanel extends JPanel implements ActionListener{
 				log.append("Nessun file selezionato" + nl);
 			}
 		}
+		
+		else if(e.getSource() == startB){
+			Element f = null;
+			for(int z = 0; z < q.getElements().size(); z++) {
+				f = q.getElements().get(z);
+				control(f);
+			}
+		}
 	}
 	
 	public void print(String str) {
 		log.append(str + nl);
 		log.setCaretPosition(log.getDocument().getLength());
+	}
+	//chiamare i Thred qui
+	private void control(Element e) {
+		
+		if(getExtention(e.getNameFile()).equals(".par1")) {
+			//split = new Splitter(e.getPath(), false);
+			log.append(e.getNameFile() + "è .par" + nl);
+		}
+		
+		else if(getExtention(e.getNameFile()).equals(".zip")) {
+			//split = new Splitter();
+			log.append(e.getNameFile() + " è un file .zip" + nl);
+		}
+		
+		else if(e.getMode().equals("Parti")) {
+			//MyFrame2 f2 = new MyFrame2(f);
+			log.append(e.getNameFile() + " è da dividere per parti" + nl);
+		}
+		
+		else {
+			//split = new Splitter(e.getPath(), true);
+			log.append( e.getNameFile() + " è da splittare" + nl);
+		}
+	}
+	
+	private String getExtention(String n) {
+		return n.substring(n.lastIndexOf('.'));
 	}
 }
