@@ -3,12 +3,16 @@ package graphic;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import java.io.File;
 import back.Splitter;
@@ -23,12 +27,14 @@ public class homePanel extends JPanel implements ActionListener{
 	private JScrollPane spt,spl;
 	private JPanel bp;
 	private JButton addB, removeB, startB;
+	private JComboBox<String> box;
 	private JFileChooser fc;
 	private Queue q;
 	private Splitter split;
 	private static JTextArea log;
 	private final static String nl = "\n";
-
+	private setupFrame suf;
+	
 	public homePanel() {
 
 		super(new BorderLayout());
@@ -48,6 +54,12 @@ public class homePanel extends JPanel implements ActionListener{
 		jt.setRowSelectionAllowed(true);
 		jt.setColumnSelectionAllowed(false);
 
+		box = new JComboBox<String>();
+		box.addItem("Default");
+		box.addItem("Parti");
+		box.addItem("Zip");
+		box.addItem("Cripto");
+		
 		addB = new JButton("Aggiungi");
 		addB.addActionListener(this);
 		removeB = new JButton("Rimuovi");
@@ -68,13 +80,14 @@ public class homePanel extends JPanel implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == addB) {
-			int returnVal = fc.showDialog(homePanel.this, "Add");
+			//int returnVal = fc.showDialog(homePanel.this, "Add");
 			print("Clicked add" + nl);
-			if(returnVal == JFileChooser.APPROVE_OPTION) {
-				File file = fc.getSelectedFile();
-				MyTableModel model = (MyTableModel)jt.getModel();
-				model.add(new Element(file.getAbsolutePath(), file.getName(), "Default", 100));
-			}
+			//if(returnVal == JFileChooser.APPROVE_OPTION) {
+				suf = new setupFrame();
+				//File file = fc.getSelectedFile();
+				//MyTableModel model = (MyTableModel)jt.getModel();
+				//model.add(new Element(file.getAbsolutePath(), file.getName(), "Default", 100));
+			//}
 		}
 
 		else if (e.getSource() == removeB) {

@@ -160,8 +160,4 @@ public class Splitter {
 			System.out.println("Qualcosa è andato storto " + e);
 		}
 	}
-	
-	public void organize(String pathInput) {
-		
-	}
 }

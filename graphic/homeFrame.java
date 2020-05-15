@@ -2,21 +2,20 @@ package graphic;
 
 import javax.swing.*;
 
-public class homeFrame{
-	private JFrame jf;
+public class homeFrame extends JFrame{
 	private homePanel hp;
 
 	public homeFrame() {
 
-		jf = new JFrame("Splitter");
+		super("Splitter");
 		hp = new homePanel();
 
-		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		jf.setSize(600,600);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setSize(600,600);
 
-		jf.add(hp);
-		jf.pack();
-		jf.setVisible(true);
+		this.add(hp);
+		this.pack();
+		this.setVisible(true);
 	}
 
 	public homePanel getHp() {
