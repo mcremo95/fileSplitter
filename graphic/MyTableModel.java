@@ -6,8 +6,10 @@ import back.Queue;
 import back.Element;
 
 public class MyTableModel extends AbstractTableModel{
-	String[] colName = {"FileName", "Path", "Mode", "Dimension (MB)"};
-	Vector<Element> v = null;
+
+	private static final long serialVersionUID = 1L;
+	private String[] colName = {"FileName", "Path", "Mode", "Dimension (KB)"};
+	private Vector<Element> v = null;
 
 	/**
 	 * Costruttore
@@ -18,15 +20,14 @@ public class MyTableModel extends AbstractTableModel{
 	}
 
 	public int getColumnCount() { return colName.length; }
-	
+
 	public int getRowCount() { 
 		if(v == null) return 1;
 		else return v.size(); 
 	}
-	
+
 	public boolean IsCellEditable(int row, int col) {
-		if(col == 3) { return true;	}
-		else {	return false;	}
+		return false;
 	}
 
 	public String getColumnName(int col) {

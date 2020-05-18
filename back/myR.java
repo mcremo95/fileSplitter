@@ -1,5 +1,7 @@
 package back;
 
+import graphic.homePanel;
+
 public class myR implements Runnable{
 
 	private int id;
@@ -13,11 +15,31 @@ public class myR implements Runnable{
 
 	public void run() {
 		String str = "-Thread n:" + this.id;
-		
-		//if o switch per tutte le modalità interessate dal programma
-		if(element.getMode() == "") {
-			
+		homePanel.print(str);
+		s = new Splitter();
+
+		if(element.getMode().equals(".par1")) {
+
+		}
+
+		else if(element.getMode().equals(".zip")) {
+
+		}
+
+		else if(element.getMode().equals(".cry")) {
+
+		}
+
+		else if(element.getMode().equals(".par1.zip")){
+
+		}
+
+		else if(element.getMode().equals(".par1.cry")){
+
 		}
 		
+		else {
+			
+		}
 	}
 }
