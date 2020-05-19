@@ -59,8 +59,13 @@ public class homePanel extends JPanel implements ActionListener{
 			Element f = null;
 
 			for(int z = 0; z < q.getElements().size(); z++) {
+				System.out.println("z è: " + z);
 				f = q.getElements().get(z);
+				System.out.println("f.getPath: " + f.getPath());
+				System.out.println("f.getNameFile: " + f.getNameFile());
+				System.out.println("f.getMode: " + f.getMode());
 				t = new Thread(new myR(z, f));
+				t.start();
 			}
 		}
 	}

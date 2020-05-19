@@ -23,75 +23,82 @@ public class setupFrame extends JFrame implements ActionListener{
 	private JLabel lm, lf, lg;
 	private JTextField tf, tg;
 	private File f;
-	
-	public setupFrame() {
+	private int rv;
 
+	public setupFrame() {
+		rv = 0;
 	}
-	
+
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == addButton) {
-			
-			int rv = fc.showDialog(this, "Aggiungi");
-			
+
+			rv = fc.showDialog(this, "Aggiungi");
+
 			if(rv == JFileChooser.APPROVE_OPTION) {
 				f = fc.getSelectedFile();
 				tf.setText(f.getPath());
 			}
 		}
-		
+
 		if(e.getSource() == okButton) {
 			MyTableModel model = (MyTableModel)homePanel.jt.getModel();
-			int temp = Integer.parseInt(tg.getText());
-			model.add(new Element(f.getAbsolutePath(), f.getName(),
-					box.getSelectedItem().toString(), temp));
+
+			if(rv == JFileChooser.APPROVE_OPTION) {
+				int temp = Integer.parseInt(tg.getText());
+				model.add(new Element(f.getAbsolutePath(), f.getName(),
+						box.getSelectedItem().toString(), temp));
+				this.dispose();
+			}
+		}
+		
+		if(e.getSource() == refuseButton) {
 			this.dispose();
 		}
 	}
-	
+
 	public void showGUI() {
 		this.setSize(600,150);
-		
+
 		jp = new JPanel(new BorderLayout());
 		this.add(jp);
-		
+
 		lp = new JPanel();
 		cp = new JPanel();
 		up = new JPanel();
-		
+
 		fc = new JFileChooser();
-		
+
 		lf = new JLabel("Path del file");
 		cp.add(lf);
 		tf = new JTextField(25);
 		tf.setEditable(false);
 		tf.setText("Clicca su aggiungi per scegliere il file");
 		cp.add(tf);
-		
+
 		addButton = new JButton("aggiungi");
 		addButton.addActionListener(this);
 		cp.add(addButton);
-		
+
 		cp.add(new JLabel("                "));
-		
+
 		lg = new JLabel("Grandezza (KB)");
 		cp.add(lg);
 		tg = new JTextField("500");
 		tf.setEditable(true);
 		cp.add(tg);
-		
-		
+
+
 		lm = new JLabel("modalità");
 		up.add(lm);
 		box = new JComboBox<String>();
-		box.addItem("Default");
-		box.addItem("Parti");
+		box.addItem("Split");
 		box.addItem("Zip");
 		box.addItem("Crypto");
 		box.addItem("Unsplit");
 		box.addItem("Unzip");
 		box.addItem("Uncrypto");
 		up.add(box);
-		
+
 		okButton = new JButton("conferma");
 		okButton.addActionListener(this);
 		lp.add(okButton);
