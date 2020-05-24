@@ -22,7 +22,7 @@ public class homePanel extends JPanel implements ActionListener{
 	private JPanel bp;
 	private JButton addB, removeB, startB;
 	private Queue q = new Queue();
-	private static JTextArea log;
+	private JTextArea log;
 	private final static String nl = "\n";
 	private setupFrame suf;
 	private Thread t;
@@ -59,18 +59,14 @@ public class homePanel extends JPanel implements ActionListener{
 			Element f = null;
 
 			for(int z = 0; z < q.getElements().size(); z++) {
-				System.out.println("z è: " + z);
 				f = q.getElements().get(z);
-				System.out.println("f.getPath: " + f.getPath());
-				System.out.println("f.getNameFile: " + f.getNameFile());
-				System.out.println("f.getMode: " + f.getMode());
-				t = new Thread(new myR(z, f));
+				t = new Thread(new myR(f));
 				t.start();
 			}
 		}
 	}
 
-	public static void print(String str) {
+	public void print(String str) {
 		log.append(str + nl);
 		log.setCaretPosition(log.getDocument().getLength());
 	}
