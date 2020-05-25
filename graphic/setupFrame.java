@@ -16,35 +16,35 @@ import java.io.File;
 public class setupFrame extends JFrame implements ActionListener{
 
 	private static final long serialVersionUID = 1L;
-	private JFileChooser fc;
+	private JFileChooser fileChooser;
 	private JButton okButton, refuseButton, addButton;
 	private JComboBox<String> box;
-	private JPanel jp, lp, cp, up;
-	private JLabel lm, lf, lg;
-	private JTextField tf, tg;
+	private JPanel panelPrincipale, pannelloLog, pannelloCentrale, panelloSuperiore;
+	private JLabel labelModalita, labelFile, labelGrandezza;
+	private JTextField textPath, textGrandezza;
 	private File f;
-	private int rv;
+	private int returnValue;
 
 	public setupFrame() {
-		rv = 0;
+		returnValue = 0;
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == addButton) {
 
-			rv = fc.showDialog(this, "Aggiungi");
+			returnValue = fileChooser.showDialog(this, "Aggiungi");
 
-			if(rv == JFileChooser.APPROVE_OPTION) {
-				f = fc.getSelectedFile();
-				tf.setText(f.getPath());
+			if(returnValue == JFileChooser.APPROVE_OPTION) {
+				f = fileChooser.getSelectedFile();
+				textPath.setText(f.getPath());
 			}
 		}
 
 		if(e.getSource() == okButton) {
 			MyTableModel model = (MyTableModel)homePanel.jt.getModel();
 
-			if(rv == JFileChooser.APPROVE_OPTION) {
-				int temp = Integer.parseInt(tg.getText());
+			if(returnValue == JFileChooser.APPROVE_OPTION) {
+				int temp = Integer.parseInt(textGrandezza.getText());
 				model.add(new Element(f.getAbsolutePath(), f.getName(),
 						box.getSelectedItem().toString(), temp));
 				this.dispose();
@@ -59,56 +59,57 @@ public class setupFrame extends JFrame implements ActionListener{
 	public void showGUI() {
 		this.setSize(600,150);
 
-		jp = new JPanel(new BorderLayout());
-		this.add(jp);
+		panelPrincipale = new JPanel(new BorderLayout());
+		this.add(panelPrincipale);
 
-		lp = new JPanel();
-		cp = new JPanel();
-		up = new JPanel();
+		pannelloLog = new JPanel();
+		pannelloCentrale = new JPanel();
+		panelloSuperiore = new JPanel();
 
-		fc = new JFileChooser();
+		fileChooser = new JFileChooser();
 
-		lf = new JLabel("Path del file");
-		cp.add(lf);
-		tf = new JTextField(25);
-		tf.setEditable(false);
-		tf.setText("Clicca su aggiungi per scegliere il file");
-		cp.add(tf);
+		labelFile = new JLabel("Path del file");
+		pannelloCentrale.add(labelFile);
+		textPath = new JTextField(25);
+		textPath.setEditable(false);
+		textPath.setText("Clicca su aggiungi per scegliere il file");
+		pannelloCentrale.add(textPath);
 
 		addButton = new JButton("aggiungi");
 		addButton.addActionListener(this);
-		cp.add(addButton);
+		pannelloCentrale.add(addButton);
 
-		cp.add(new JLabel("                "));
+		pannelloCentrale.add(new JLabel("                "));
 
-		lg = new JLabel("Grandezza (KB)");
-		cp.add(lg);
-		tg = new JTextField("500");
-		tf.setEditable(true);
-		cp.add(tg);
+		labelGrandezza = new JLabel("Grandezza (KB)");
+		pannelloCentrale.add(labelGrandezza);
+		textGrandezza = new JTextField("500");
+		textPath.setEditable(true);
+		pannelloCentrale.add(textGrandezza);
 
 
-		lm = new JLabel("modalità");
-		up.add(lm);
+		labelModalita = new JLabel("modalità");
+		panelloSuperiore.add(labelModalita);
 		box = new JComboBox<String>();
-		box.addItem("Split");
+		box.addItem("Split(Default)");
+		box.addItem("Split(Parti)");
 		box.addItem("Zip");
 		box.addItem("Crypto");
 		box.addItem("Unsplit");
 		box.addItem("Unzip");
 		box.addItem("Uncrypto");
-		up.add(box);
+		panelloSuperiore.add(box);
 
 		okButton = new JButton("conferma");
 		okButton.addActionListener(this);
-		lp.add(okButton);
+		pannelloLog.add(okButton);
 		refuseButton = new JButton("annulla");
 		refuseButton.addActionListener(this);
-		lp.add(refuseButton);
+		pannelloLog.add(refuseButton);
 
-		jp.add(up, BorderLayout.PAGE_START);
-		jp.add(cp, BorderLayout.CENTER);
-		jp.add(lp,  BorderLayout.PAGE_END);
+		panelPrincipale.add(panelloSuperiore, BorderLayout.PAGE_START);
+		panelPrincipale.add(pannelloCentrale, BorderLayout.CENTER);
+		panelPrincipale.add(pannelloLog,  BorderLayout.PAGE_END);
 		this.setVisible(true);
 	}
 }
