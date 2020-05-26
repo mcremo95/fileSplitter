@@ -3,6 +3,8 @@ package graphic;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -19,7 +21,7 @@ public class setupFrame extends JFrame implements ActionListener{
 	private JFileChooser fileChooser;
 	private JButton okButton, refuseButton, addButton;
 	private JComboBox<String> box;
-	private JPanel panelPrincipale, pannelloLog, pannelloCentrale, panelloSuperiore;
+	private JPanel pannelloPrincipale, pannelloBottoni, pannelloCentrale, pannelloSuperiore;
 	private JLabel labelModalita, labelFile, labelGrandezza;
 	private JTextField textPath, textGrandezza;
 	private File f;
@@ -57,14 +59,15 @@ public class setupFrame extends JFrame implements ActionListener{
 	}
 
 	public void showGUI() {
-		this.setSize(600,150);
+		this.setSize(600,200);
 
-		panelPrincipale = new JPanel(new BorderLayout());
-		this.add(panelPrincipale);
+		pannelloPrincipale = new JPanel();
+		pannelloPrincipale.setLayout(new BoxLayout(pannelloPrincipale, BoxLayout.Y_AXIS));
+		this.add(pannelloPrincipale);
 
-		pannelloLog = new JPanel();
+		pannelloBottoni = new JPanel();
 		pannelloCentrale = new JPanel();
-		panelloSuperiore = new JPanel();
+		pannelloSuperiore = new JPanel();
 
 		fileChooser = new JFileChooser();
 
@@ -83,33 +86,32 @@ public class setupFrame extends JFrame implements ActionListener{
 
 		labelGrandezza = new JLabel("Grandezza (KB)");
 		pannelloCentrale.add(labelGrandezza);
-		textGrandezza = new JTextField("500");
-		textPath.setEditable(true);
+		textGrandezza = new JTextField(5);
+		textGrandezza.setText("512");
+		textGrandezza.setEditable(true);
 		pannelloCentrale.add(textGrandezza);
 
 
 		labelModalita = new JLabel("modalità");
-		panelloSuperiore.add(labelModalita);
+		pannelloSuperiore.add(labelModalita);
 		box = new JComboBox<String>();
 		box.addItem("Split(Default)");
 		box.addItem("Split(Parti)");
 		box.addItem("Zip");
 		box.addItem("Crypto");
 		box.addItem("Unsplit");
-		box.addItem("Unzip");
-		box.addItem("Uncrypto");
-		panelloSuperiore.add(box);
+		pannelloSuperiore.add(box);
 
 		okButton = new JButton("conferma");
 		okButton.addActionListener(this);
-		pannelloLog.add(okButton);
+		pannelloBottoni.add(okButton);
 		refuseButton = new JButton("annulla");
 		refuseButton.addActionListener(this);
-		pannelloLog.add(refuseButton);
+		pannelloBottoni.add(refuseButton);
 
-		panelPrincipale.add(panelloSuperiore, BorderLayout.PAGE_START);
-		panelPrincipale.add(pannelloCentrale, BorderLayout.CENTER);
-		panelPrincipale.add(pannelloLog,  BorderLayout.PAGE_END);
+		pannelloPrincipale.add(pannelloSuperiore, BorderLayout.PAGE_START);
+		pannelloPrincipale.add(pannelloCentrale, BorderLayout.CENTER);
+		pannelloPrincipale.add(pannelloBottoni,  BorderLayout.PAGE_END);
 		this.setVisible(true);
 	}
 }

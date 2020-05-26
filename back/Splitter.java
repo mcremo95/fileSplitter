@@ -112,12 +112,17 @@ public class Splitter {
 				out = new BufferedOutputStream(fout);
 
 				if(i == parti) { grandezza = grandezza + resto; }
-
-				for(int j = 0; j < grandezza; j++) {
+				
+				if(grandezza > 512) {	b = new byte[512];	}
+				else {	b = new byte[(int) grandezza]; }
+				
+				for(int j = 0; j < grandezza; ) {
+					if((grandezza-j) < 512) {	b = new byte[(int) (grandezza-j)];	}
 					in.read(b);
 					out.write(b);
-					lunghezzaTmp += 1;
-					if((lunghezzaTmp%percentuale) == 0) {	bar.setValue(bar.getValue() + 1);	}
+					lunghezzaTmp += b.length;
+					bar.setValue((int) lunghezzaTmp/(int) percentuale);
+					j += b.length;
 				}
 
 				out.close();
@@ -154,6 +159,7 @@ public class Splitter {
 
 			print("Controllo il numero di file da riattaccare" + nl);
 
+			print("Grandezza :" + grandezza);
 			for(int i = 1; i < i+1; i++) {
 				f = new File(pathTmp);
 				if(f.exists()) {
@@ -164,24 +170,32 @@ public class Splitter {
 
 				else {	break; }
 			}
-
-			print("Numero di f");
-
+			
 			resto = lunghezza%numeroFile;
 			lunghezzaTmp = 0;
 			percentuale = lunghezza/100;
+			
+			print("numeroFile: " + numeroFile);
 
 			for(int i = 1; i <= numeroFile; i++) {
 				fin = new FileInputStream(e.getPath());
 				in = new BufferedInputStream(fin);
 
 				if(i == numeroFile) { grandezza = grandezza + resto; }
+				
+				if(grandezza > 512) {	b = new byte[512];	}
+				else {	b = new byte[(int) grandezza]; }
+				
+				print("Unsplitto la parte n: " + i + " del file " + 
+						f.getName().replace(".mp4.par" + (numeroFile + 1), "u.mp4"));
 
-				for(int j = 0; j < grandezza; j++) {
+				for(int j = 0; j < grandezza; ) {
+					if((grandezza-j) < 512) {	b = new byte[(int) (grandezza-j)];	}
 					in.read(b);
 					out.write(b);
-					lunghezzaTmp += 1;
-					if((lunghezzaTmp%percentuale) == 0) {	bar.setValue(bar.getValue() + 1);	}
+					lunghezzaTmp += b.length;
+					bar.setValue((int) lunghezzaTmp/(int) percentuale);
+					j += b.length;
 				}
 
 				e.setPath(e.getPath().replace(".par" + i, ".par" + (i+1)));
