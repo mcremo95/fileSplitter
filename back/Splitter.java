@@ -13,17 +13,17 @@ import javax.swing.JTextArea;
 public class Splitter {
 	private Element e;
 	private String pathOut;
-	private File f;
-	private FileInputStream fin;
-	private FileOutputStream fout;
-	private BufferedInputStream in;
-	private BufferedOutputStream out;
+	private File file;
+	private FileInputStream fileIn;
+	private FileOutputStream fileOut;
+	private BufferedInputStream buffIn;
+	private BufferedOutputStream buffOut;
 	private JFrame FileFrame;
 	private JPanel FilePanel;
-	private JProgressBar bar;
+	private JProgressBar progressBar;
 	private JTextArea log;
-	private JScrollPane spl;
-	private final static String nl = "\n";
+	private JScrollPane scrollPaneLog;
+	private final static String newLine = "\n";
 	private byte[] b = new byte[1];
 	private long parti = 3;
 	private long resto = 0;
@@ -32,84 +32,70 @@ public class Splitter {
 	private long percentuale;
 
 	public Splitter() {
-		this.pathOut = f.getParent();
+		this.pathOut = file.getParent();
 
-		System.out.println("f" + f.getAbsolutePath());
+		System.out.println("f" + file.getAbsolutePath());
 		System.out.println("path out " + pathOut);
 
 		this.parti = 3;
-		this.grandezza = f.length()/parti;
-		this.resto = f.length()%parti;
+		this.grandezza = file.length()/parti;
+		this.resto = file.length()%parti;
 	}
 
-	/**
-	 * 
-	 * @param path il path del file su cui lavorare
-	 * @param mode se true splitta se è false unsplitta
-	 * @param p le parti in cui dividere
-	 */
 	public Splitter(Element element, int p) {
 
 		this.e = element;
-		this.f = new File(e.getPath());
-		this.pathOut = f.getParent();
+		this.file = new File(e.getPath());
+		this.pathOut = file.getParent();
 
 		this.parti = p;
-		this.resto = f.length()%parti;
+		this.resto = file.length()%parti;
 
 		this.FileFrame = new JFrame(e.getNameFile());
 		this.FilePanel = new JPanel();
 		this.FilePanel.setLayout(new BoxLayout(FilePanel, BoxLayout.Y_AXIS));
-		this.bar = new JProgressBar();
-		this.bar.setValue(0);
-		this.bar.setStringPainted(true);
+		this.progressBar = new JProgressBar();
+		this.progressBar.setValue(0);
+		this.progressBar.setStringPainted(true);
 		this.log = new JTextArea(10,10);
 		this.log.setEditable(false);
-		this.spl = new JScrollPane(log);
-		this.FilePanel.add(bar);
-		this.FilePanel.add(spl);
+		this.scrollPaneLog = new JScrollPane(log);
+		this.FilePanel.add(progressBar);
+		this.FilePanel.add(scrollPaneLog);
 		this.FileFrame.add(FilePanel);
 		this.FileFrame.setSize(300,300);
 		this.FileFrame.setVisible(true);
 
-		if(e.getMode().contentEquals("Split(Default)")) {
-			parti = f.length()/(p*1024);
-			resto = f.length()%parti;
-			grandezza = (f.length()-resto)/parti;
-			lunghezzaTmp = 0;
-			percentuale = f.length()/100;
-			split();
+		if(e.getMode().contentEquals("Split(Default)")
+				|| e.getMode().contentEquals("Zip")) {
+			this.parti = file.length()/(p*1024);
+			this.resto = file.length()%parti;
+			this.grandezza = (file.length()-resto)/parti;
+			this.lunghezzaTmp = 0;
+			this.percentuale = file.length()/100;
 		}
 		
 		else if(e.getMode().contentEquals("Split(Parti)")) {
-			grandezza = (f.length()-resto)/parti;
-			lunghezzaTmp = 0;
-			percentuale = f.length()/100;
-			split();
+			this.grandezza = (file.length()-resto)/parti;
+			this.lunghezzaTmp = 0;
+			this.percentuale = file.length()/100;
 		}
-		
-		else { unsplit(); }
 	}
-
-	/**
-	 * @param path il path del file su cui lavorare
-	 * @param mode se true splitta se è false unsplitta
-	 */
 
 	public void split() {
 
 		try{
-			fin = new FileInputStream(e.getPath());
-			in = new BufferedInputStream(fin);
+			fileIn = new FileInputStream(e.getPath());
+			buffIn = new BufferedInputStream(fileIn);
 
-			print("Inizio Split" + nl);
+			print("Inizio Split");
 
 			for(int i = 1; i <= parti; i++) {
 
-				pathOut = f.getAbsolutePath() + ".par" + i;
-				print("Splitto la parte n: " + i + " del file " + f.getName() + nl);
-				fout = new FileOutputStream(pathOut);
-				out = new BufferedOutputStream(fout);
+				pathOut = file.getAbsolutePath() + ".par" + i;
+				print("Splitto la parte n: " + i + " del file " + file.getName());
+				fileOut = new FileOutputStream(pathOut);
+				buffOut = new BufferedOutputStream(fileOut);
 
 				if(i == parti) { grandezza = grandezza + resto; }
 				
@@ -118,54 +104,54 @@ public class Splitter {
 				
 				for(int j = 0; j < grandezza; ) {
 					if((grandezza-j) < 512) {	b = new byte[(int) (grandezza-j)];	}
-					in.read(b);
-					out.write(b);
+					buffIn.read(b);
+					buffOut.write(b);
 					lunghezzaTmp += b.length;
-					bar.setValue((int) lunghezzaTmp/(int) percentuale);
+					progressBar.setValue((int) lunghezzaTmp/(int) percentuale);
 					j += b.length;
 				}
 
-				out.close();
-				fout.close();
+				buffOut.close();
+				fileOut.close();
 			}
 
-			in.close();
-			out.close();
-			fin.close();
-			fout.close();
+			buffIn.close();
+			buffOut.close();
+			fileIn.close();
+			fileOut.close();
 		}
 
 		catch(Exception e) {
-			print("Qualcosa è andato storto " + e + nl);
+			print("Qualcosa è andato storto " + e);
 		}
 
-		print("Fine Split" + nl);
+		print("Fine Split");
 	}
 
 	public void unsplit() {
 
-		this.grandezza = f.length();
+		this.grandezza = file.length();
 
 		try {
 
-			print("Inizio unsplit" + nl);
+			print("Inizio unsplit");
 
-			fout = new FileOutputStream(e.getPath().replace(".mp4.par1", "u.mp4"));
-			out = new BufferedOutputStream(fout);
+			fileOut = new FileOutputStream(e.getPath().replace(".mp4.par1", "u.mp4"));
+			buffOut = new BufferedOutputStream(fileOut);
 
 			String pathTmp = e.getPath().toString();
 			int numeroFile = 0;
 			long lunghezza = 0;
 
-			print("Controllo il numero di file da riattaccare" + nl);
+			print("Controllo il numero di file da riattaccare" + newLine);
 
 			print("Grandezza :" + grandezza);
 			for(int i = 1; i < i+1; i++) {
-				f = new File(pathTmp);
-				if(f.exists()) {
+				file = new File(pathTmp);
+				if(file.exists()) {
 					pathTmp = pathTmp.replace(".par" + i, ".par" + (i+1));
 					numeroFile++;
-					lunghezza += f.length();
+					lunghezza += file.length();
 				}
 
 				else {	break; }
@@ -178,8 +164,8 @@ public class Splitter {
 			print("numeroFile: " + numeroFile);
 
 			for(int i = 1; i <= numeroFile; i++) {
-				fin = new FileInputStream(e.getPath());
-				in = new BufferedInputStream(fin);
+				fileIn = new FileInputStream(e.getPath());
+				buffIn = new BufferedInputStream(fileIn);
 
 				if(i == numeroFile) { grandezza = grandezza + resto; }
 				
@@ -187,38 +173,183 @@ public class Splitter {
 				else {	b = new byte[(int) grandezza]; }
 				
 				print("Unsplitto la parte n: " + i + " del file " + 
-						f.getName().replace(".mp4.par" + (numeroFile + 1), "u.mp4"));
+						file.getName().replace(".mp4.par" + (numeroFile + 1), "u.mp4"));
 
 				for(int j = 0; j < grandezza; ) {
 					if((grandezza-j) < 512) {	b = new byte[(int) (grandezza-j)];	}
-					in.read(b);
-					out.write(b);
+					buffIn.read(b);
+					buffOut.write(b);
 					lunghezzaTmp += b.length;
-					bar.setValue((int) lunghezzaTmp/(int) percentuale);
+					progressBar.setValue((int) lunghezzaTmp/(int) percentuale);
 					j += b.length;
 				}
 
 				e.setPath(e.getPath().replace(".par" + i, ".par" + (i+1)));
 
-				in.close();
-				fin.close();
+				buffIn.close();
+				fileIn.close();
 			}
 
-			in.close();
-			out.close();
-			fin.close();
-			fout.close();
+			buffIn.close();
+			buffOut.close();
+			fileIn.close();
+			fileOut.close();
 
-			print("Fine unsplit" + nl);
+			print("Fine unsplit");
 		}
 
 		catch(Exception e) {
-			print("Qualcosa è andato storto " + e + nl);
+			print("Qualcosa è andato storto " + e);
 		}
 	}
 
-	public void print(String str) {
-		log.append(str + nl);
+	protected void print(String str) {
+		log.append(str + newLine);
 		log.setCaretPosition(log.getDocument().getLength());
 	}
+
+	public Element getE() {
+		return e;
+	}
+
+	public void setE(Element e) {
+		this.e = e;
+	}
+
+	public String getPathOut() {
+		return pathOut;
+	}
+
+	public void setPathOut(String pathOut) {
+		this.pathOut = pathOut;
+	}
+
+	public File getFile() {
+		return file;
+	}
+
+	public void setFile(File file) {
+		this.file = file;
+	}
+
+	public FileInputStream getFileIn() {
+		return fileIn;
+	}
+
+	public void setFileIn(FileInputStream fileIn) {
+		this.fileIn = fileIn;
+	}
+
+	public FileOutputStream getFileOut() {
+		return fileOut;
+	}
+
+	public void setFileOut(FileOutputStream fileOut) {
+		this.fileOut = fileOut;
+	}
+
+	public BufferedInputStream getBuffIn() {
+		return buffIn;
+	}
+
+	public void setBuffIn(BufferedInputStream buffIn) {
+		this.buffIn = buffIn;
+	}
+
+	public BufferedOutputStream getBuffOut() {
+		return buffOut;
+	}
+
+	public void setBuffOut(BufferedOutputStream buffOut) {
+		this.buffOut = buffOut;
+	}
+
+	public JFrame getFileFrame() {
+		return FileFrame;
+	}
+
+	public void setFileFrame(JFrame fileFrame) {
+		FileFrame = fileFrame;
+	}
+
+	public JPanel getFilePanel() {
+		return FilePanel;
+	}
+
+	public void setFilePanel(JPanel filePanel) {
+		FilePanel = filePanel;
+	}
+
+	public JProgressBar getProgressBar() {
+		return progressBar;
+	}
+
+	public void setProgressBar(JProgressBar progressBar) {
+		this.progressBar = progressBar;
+	}
+
+	public JTextArea getLog() {
+		return log;
+	}
+
+	public void setLog(JTextArea log) {
+		this.log = log;
+	}
+
+	public JScrollPane getScrollPaneLog() {
+		return scrollPaneLog;
+	}
+
+	public void setScrollPaneLog(JScrollPane scrollPaneLog) {
+		this.scrollPaneLog = scrollPaneLog;
+	}
+
+	public byte[] getB() {
+		return b;
+	}
+
+	public void setB(byte[] b) {
+		this.b = b;
+	}
+
+	public long getParti() {
+		return parti;
+	}
+
+	public void setParti(long parti) {
+		this.parti = parti;
+	}
+
+	public long getResto() {
+		return resto;
+	}
+
+	public void setResto(long resto) {
+		this.resto = resto;
+	}
+
+	public long getGrandezza() {
+		return grandezza;
+	}
+
+	public void setGrandezza(long grandezza) {
+		this.grandezza = grandezza;
+	}
+
+	public long getLunghezzaTmp() {
+		return lunghezzaTmp;
+	}
+
+	public void setLunghezzaTmp(long lunghezzaTmp) {
+		this.lunghezzaTmp = lunghezzaTmp;
+	}
+
+	public long getPercentuale() {
+		return percentuale;
+	}
+
+	public void setPercentuale(long percentuale) {
+		this.percentuale = percentuale;
+	}
+
 }
