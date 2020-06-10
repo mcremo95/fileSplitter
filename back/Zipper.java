@@ -1,5 +1,6 @@
 package back;
 
+import java.awt.BorderLayout;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -9,44 +10,37 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import javax.swing.JLabel;
+import javax.swing.JProgressBar;
+
 public class Zipper extends Splitter{
 	private ZipEntry entry;
 	private ZipOutputStream zipOut;
 	private ZipInputStream zipIn;
+	private JLabel zipLabel;
+	private JProgressBar progressBarZip;
 
 	public Zipper(Element element, int p) {
 		super(element, p);
+		this.progressBarZip = new JProgressBar();
+		this.progressBarZip.setValue(0);
+		this.progressBarZip.setStringPainted(true);
+		getContenitore().remove(getFilePanel());
+		
 	}
 
 	public void split() {
+		this.zipLabel = new JLabel("Zip");
+		getBarPanel().add(zipLabel);
+		getBarPanel().add(progressBarZip);
+		getContenitore().add(getFilePanel(), BorderLayout.PAGE_END);
+		
 		try {
-
+			super.split();
 			print("Inizio zip");
-			setFileIn(new FileInputStream(getE().getPath()));
-			setBuffIn(new BufferedInputStream(getFileIn()));
-			entry = new ZipEntry(getE().getPath());
-
-			for(int i = 1; i <= getParti(); i++) {
-				setPathOut(getFile().getAbsolutePath() + ".zip" + i);
-				setFileOut(new FileOutputStream(getPathOut()));
-				zipOut = new ZipOutputStream(getFileOut());
-				zipOut.putNextEntry(entry);
-
-				for(int j = 0; j < getGrandezza(); ) {
-					if((getGrandezza()-j) < 512) {
-						setB(new byte[(int) (getGrandezza()-j)]);
-					}
-					getBuffIn().read(getB());
-					zipOut.write(getB());
-					setLunghezzaTmp(getB().length + getLunghezzaTmp());
-					getProgressBar().setValue(
-							(int) getLunghezzaTmp()/(int) getPercentuale());
-					j += getB().length;
-				}
-			}
-
-			zipOut.close();
-			getFileOut().close();
+			Thread.sleep(4000);
+			progressBarZip.setValue(100);
+			print("FIne zip");
 		}
 
 		catch(Exception e) {
@@ -55,7 +49,10 @@ public class Zipper extends Splitter{
 	}
 
 	public void unsplit() {
-		
+
+		this.zipLabel = new JLabel("Unzip");
+		getBarPanel().add(zipLabel);
+		getBarPanel().add(progressBarZip);
 		setGrandezza(getFile().length());
 
 		try {

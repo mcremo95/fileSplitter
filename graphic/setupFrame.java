@@ -43,7 +43,7 @@ public class setupFrame extends JFrame implements ActionListener{
 		}
 
 		if(e.getSource() == okButton) {
-			MyTableModel model = (MyTableModel)homePanel.jt.getModel();
+			MyTableModel model = (MyTableModel)homePanel.myTable.getModel();
 
 			if(returnValue == JFileChooser.APPROVE_OPTION) {
 				int temp = Integer.parseInt(textGrandezza.getText());

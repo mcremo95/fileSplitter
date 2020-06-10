@@ -1,9 +1,11 @@
 package back;
 
+import java.awt.BorderLayout;
 import java.io.*;
 
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
@@ -19,7 +21,8 @@ public class Splitter {
 	private BufferedInputStream buffIn;
 	private BufferedOutputStream buffOut;
 	private JFrame FileFrame;
-	private JPanel FilePanel;
+	private JLabel splitLabel;
+	private JPanel FilePanel, BarPanel, Contenitore;
 	private JProgressBar progressBar;
 	private JTextArea log;
 	private JScrollPane scrollPaneLog;
@@ -52,18 +55,24 @@ public class Splitter {
 		this.resto = file.length()%parti;
 
 		this.FileFrame = new JFrame(e.getNameFile());
+		this.BarPanel = new JPanel();
+		this.Contenitore = new JPanel(new BorderLayout());
+		this.BarPanel.setLayout(new BoxLayout(BarPanel, BoxLayout.Y_AXIS));
 		this.FilePanel = new JPanel();
-		this.FilePanel.setLayout(new BoxLayout(FilePanel, BoxLayout.Y_AXIS));
 		this.progressBar = new JProgressBar();
 		this.progressBar.setValue(0);
 		this.progressBar.setStringPainted(true);
-		this.log = new JTextArea(10,10);
+		this.log = new JTextArea(15,30);
 		this.log.setEditable(false);
 		this.scrollPaneLog = new JScrollPane(log);
-		this.FilePanel.add(progressBar);
+		this.splitLabel = new JLabel("Split");
+		this.BarPanel.add(splitLabel);
+		this.BarPanel.add(progressBar);
 		this.FilePanel.add(scrollPaneLog);
-		this.FileFrame.add(FilePanel);
-		this.FileFrame.setSize(300,300);
+		this.Contenitore.add(BarPanel, BorderLayout.CENTER);
+		this.Contenitore.add(FilePanel, BorderLayout.PAGE_END);
+		this.FileFrame.add(Contenitore);
+		this.FileFrame.setSize(350,350);
 		this.FileFrame.setVisible(true);
 
 		if(e.getMode().contentEquals("Split(Default)")
@@ -129,7 +138,6 @@ public class Splitter {
 	}
 
 	public void unsplit() {
-
 		this.grandezza = file.length();
 
 		try {
@@ -350,6 +358,30 @@ public class Splitter {
 
 	public void setPercentuale(long percentuale) {
 		this.percentuale = percentuale;
+	}
+
+	public JLabel getSplitLabel() {
+		return splitLabel;
+	}
+
+	public void setSplitLabel(JLabel splitLabel) {
+		this.splitLabel = splitLabel;
+	}
+
+	public JPanel getBarPanel() {
+		return BarPanel;
+	}
+
+	public void setBarPanel(JPanel barPanel) {
+		BarPanel = barPanel;
+	}
+
+	public JPanel getContenitore() {
+		return Contenitore;
+	}
+
+	public void setContenitore(JPanel contenitore) {
+		Contenitore = contenitore;
 	}
 
 }
