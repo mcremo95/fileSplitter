@@ -27,13 +27,13 @@ public class myR implements Runnable{
 				s.unsplit();
 			}
 			
-			else if(extension.contentEquals(".zip1")) {
+			else if(extension.contentEquals(".zip")) {
 				s = new Zipper(element, element.getGrandezza());
 				s.unsplit();
 			}
 			
 			else {
-				System.out.println("Male");
+				System.out.println("Impossibile leggere il file");
 			}
 		}
 

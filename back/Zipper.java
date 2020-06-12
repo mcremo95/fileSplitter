@@ -26,114 +26,144 @@ public class Zipper extends Splitter{
 		this.progressBarZip.setValue(0);
 		this.progressBarZip.setStringPainted(true);
 		getContenitore().remove(getFilePanel());
-		
+
 	}
 
-	public void split() {
+	public void Unzip(String name) {
+
+		print("Inizio a scomprimere il file " + name);
+
+		try {
+			zipIn = new ZipInputStream(new FileInputStream(name));
+			entry = zipIn.getNextEntry();
+			while (entry != null) {
+				setFile(new File(name.replace(".zip", "")));
+				setFileOut(new FileOutputStream(name.replace(".zip", "")));
+				int lunghezza = 0;
+
+				while ((lunghezza = zipIn.read(getB())) > 0) {
+					getFileOut().write(getB(), 0, lunghezza);
+				}
+				getFileOut().close();
+				entry = zipIn.getNextEntry();
+			}
+			zipIn.closeEntry();
+			zipIn.close();
+
+			print("Ho finito di scomprimere il file " + name);
+		}
+
+		catch(Exception e) {
+			print("qualcosa è andato storto " + e);
+		}
+
+		print("Ho finito di comprimere il file " + name);
+	}
+
+	public void Zip(String name){
+
+		print("Inizio a comprimere il file " + name);
+
+		try{
+			setFileOut(new FileOutputStream(name + ".zip"));
+			zipOut = new ZipOutputStream(getFileOut());
+			File fileToZip = new File(name);
+			setFileIn(new FileInputStream(fileToZip));
+			entry = new ZipEntry(fileToZip.getName());
+			zipOut.putNextEntry(entry);
+
+			int lunghezza = 0;
+
+			while((lunghezza = getFileIn().read(getB())) >= 0) {
+				zipOut.write(getB(), 0, lunghezza);
+			}
+
+			zipOut.close();
+			getFileIn().close();
+			getFileOut().close();
+
+		}
+		catch(Exception e) {
+			print("qualcosa è andato storto " + e);
+		}
+
+		print("Ho finito di comprimere il file " + name);
+	}
+
+	public void split(){
+		int i = 0;
+		int j = 1;
+		setFile(new File(getE().getPath()));
+
 		this.zipLabel = new JLabel("Zip");
 		getBarPanel().add(zipLabel);
 		getBarPanel().add(progressBarZip);
 		getContenitore().add(getFilePanel(), BorderLayout.PAGE_END);
-		
+
+		super.split();
+
+		print("controllo i file");
 		try {
-			super.split();
-			print("Inizio zip");
-			Thread.sleep(4000);
-			progressBarZip.setValue(100);
-			print("FIne zip");
+			Thread.sleep(2000);
+		}
+		
+		catch(Exception e) {
+			print("qualcosa è andato storto " + e);
+		}
+		
+		getE().setPath(getE().getPath() + ".par1");
+		
+		while(getFile().exists()) {
+			i++;
+			j++;
+			print("Il valore di i = " + i + " mentre j = " + j);
+			print("prima di cambiare ");
+			print("name è: " + getE().getPath());
+			getE().setPath(getE().getPath().replace(".par" + i, ".par" + j));
+			print("dopo il cambiamento ");
+			print("name è: " + getE().getPath());
+			setFile(new File(getE().getPath()));
 		}
 
-		catch(Exception e) {
-			print("Qualcosa è andato storto " + e);
+		print("in totale ci sono " + i + " file par");
+		getE().setPath(getE().getPath().replace(".par" + j, ""));
+		print("name è " + getE().getPath() + " j = " + j + " i = " + i);
+
+		for(j = 1; j <= i; j++) {
+			print(" j = " + j + " i = " + i);
+			Zip(getE().getPath() + ".par" + j);
 		}
 	}
 
 	public void unsplit() {
-
 		this.zipLabel = new JLabel("Unzip");
 		getBarPanel().add(zipLabel);
 		getBarPanel().add(progressBarZip);
-		setGrandezza(getFile().length());
+		getContenitore().add(getFilePanel(), BorderLayout.PAGE_END);
 
-		try {
-			setFileOut(new FileOutputStream(getE().getPath().
-					replace(".mp4.zip1", "u.mp4")));
-			setBuffOut(new BufferedOutputStream(getFileOut()));
+		File f = new File(getE().getPath());
+		int i = 0;
+		int j = i + 1;
 
-			String pathTmp = getE().getPath().toString();
-			int numeroFile = 0;
-			long lunghezza = 0;
-
-			print("Controllo il numero di file da riattaccare");
-
-			print("Grandezza: " + getGrandezza());
-
-			for(int i = 1; i < i+1; i++) {
-				print("" + i);
-				setFile(new File(pathTmp));
-				if(getFile().exists()) {
-					pathTmp = pathTmp.replace(".zip" + i, ".zip" + (i+1));
-					numeroFile++;
-					lunghezza += getFile().length();
-				}
-
-				else {	break; }
-			}
-
-			setResto(lunghezza%numeroFile);
-			setLunghezzaTmp(0);
-			setPercentuale(lunghezza/100);
-
-			print("numeroFile: " + numeroFile);
-
-			for(int i = 1; i <= numeroFile; i++) {
-				print(getE().getPath());
-				setFileIn(new FileInputStream(getE().getPath()));
-				zipIn = new ZipInputStream(getFileIn());
-
-				if(i == numeroFile) { setGrandezza(getGrandezza() + getResto()); }
-
-				if(getGrandezza() > 512) {	setB(new byte[512]);	}
-				else {	setB(new byte[(int) getGrandezza()]); }
-
-				print("Scomprimo la parte n: " + i + " del file " + 
-						getFile().getName().
-						replace(".mp4.zip" + (numeroFile + 1), "u.mp4"));
-
-				print("Inizio for di lettura e scrittura");
-				print("i:  " + i);
-				for(int j = 0; j < getGrandezza(); ) {
-					if((getGrandezza()-j) < 512) {	
-						setB(new byte[(int) (getGrandezza()-j)]);
-					}
-
-					zipIn.read(getB());
-					getBuffOut().write(getB());
-					setLunghezzaTmp(getB().length + getLunghezzaTmp());
-					getProgressBar().setValue(
-							(int) getLunghezzaTmp()/(int) getPercentuale());
-					j += getB().length;
-				}
-
-				getE().setPath(getE().getPath().replace(".zip" + i, ".zip" + (i+1)));
-				print(getE().getPath());
-				
-				print("prima della chiusura dei file");
-				zipIn.close();
-				getFileIn().close();
-				print("dopo chiusura dei file");
-			}
-
-			zipIn.close();
-			getBuffOut().close();
-			getFileIn().close();
-			getFileOut().close();
-
-			print("Fine unsplit");
+		while(f.exists()) {
+			i++;
+			j++;
+			print("Il valore di i è: " + i + " mentre j è " + j);
+			print("name è: " + getE().getPath());
+			getE().setPath(getE().getPath().replace(".par" + i, ".par" + j));
+			f = new File(getE().getPath());
 		}
 
-		catch(Exception e) {
-			print("Qualcosa è andato storto " + e);
+		print("in totale ci sono " + i + " file par");
+		getE().setPath(getE().getPath().replace(".par" + j + ".zip", ""));
+		print("name è " + getE().getPath() + " j = " + j + " i = " + i);
+
+		for(j = 1; j <= i; j++) {
+			print(" j = " + j + " i = " + i);
+			Unzip(getE().getPath() + ".par" + j + ".zip");
+			getE().setPath(getE().getPath().replace(".par" + j + ".zip", ".par" + i + ".zip"));
 		}
+		getE().setPath(getE().getPath() + ".par1");
+		super.unsplit();
 	}
 }

@@ -62,7 +62,7 @@ public class Splitter {
 		this.progressBar = new JProgressBar();
 		this.progressBar.setValue(0);
 		this.progressBar.setStringPainted(true);
-		this.log = new JTextArea(15,30);
+		this.log = new JTextArea(15,35);
 		this.log.setEditable(false);
 		this.scrollPaneLog = new JScrollPane(log);
 		this.splitLabel = new JLabel("Split");
@@ -72,7 +72,7 @@ public class Splitter {
 		this.Contenitore.add(BarPanel, BorderLayout.CENTER);
 		this.Contenitore.add(FilePanel, BorderLayout.PAGE_END);
 		this.FileFrame.add(Contenitore);
-		this.FileFrame.setSize(350,350);
+		this.FileFrame.setSize(450,450);
 		this.FileFrame.setVisible(true);
 
 		if(e.getMode().contentEquals("Split(Default)")
@@ -138,6 +138,8 @@ public class Splitter {
 	}
 
 	public void unsplit() {
+		print(e.getPath());
+		this.file = new File(e.getPath());
 		this.grandezza = file.length();
 
 		try {
