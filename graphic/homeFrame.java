@@ -7,6 +7,9 @@ public class homeFrame extends JFrame implements Window{
 	private static final long serialVersionUID = 1L;
 	private homePanel hp;
 
+	/**
+	 * Costruttore
+	 */
 	public homeFrame() {
 		super("Splitter");
 		hp = new homePanel();
@@ -14,6 +17,9 @@ public class homeFrame extends JFrame implements Window{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
+	/**
+	 * Mostra l'interfaccia
+	 */
 	public void showGUI() {
 		this.setSize(600,600);
 		this.add(hp);

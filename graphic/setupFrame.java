@@ -58,6 +58,9 @@ public class setupFrame extends JFrame implements ActionListener, Window{
 		}
 	}
 
+	/**
+	 * Mostra l'interfaccia
+	 */
 	public void showGUI() {
 		this.setSize(600,200);
 

@@ -18,6 +18,11 @@ public class Zipper extends Splitter{
 	private JLabel zipLabel;
 	private JProgressBar progressBarZip;
 
+	/**
+	 * 
+	 * @param element l'elemento di file che si vuole splittare o unplittare
+	 * @param p il numero di parti o la grandezza delle parti che si vogliono splittare
+	 */
 	public Zipper(Element element, int p) {
 		super(element, p);
 		this.progressBarZip = new JProgressBar();
@@ -27,6 +32,10 @@ public class Zipper extends Splitter{
 
 	}
 
+	/**
+	 * Scomprime un file
+	 * @param name il nome del file sul quale si vuole lavorare
+	 */
 	public void Unzip(String name) {
 
 		print("Inizio a scomprimere il file " + name);
@@ -60,6 +69,10 @@ public class Zipper extends Splitter{
 		print("Ho finito di comprimere il file " + name);
 	}
 
+	/**
+	 * Comprime un file
+	 * @param name il nome del file sul quale si vuole lavorare
+	 */
 	public void Zip(String name){
 
 		print("Inizio a comprimere il file " + name);
@@ -92,6 +105,12 @@ public class Zipper extends Splitter{
 		print("Ho finito di comprimere il file " + name);
 	}
 
+	/**
+	 * Aggiunge elementi all'interfaccia grafica,
+	 * chiama la funzione Split() della classe padre e poi
+	 * controlla tutti i file .par da comprimere e poi chiama la funzione zip
+	 * per ognuno di questi file infine elimina i file .par di scarto 
+	 */
 	public void Split(){
 		int i = 0;
 		int j = 1;
@@ -147,6 +166,11 @@ public class Zipper extends Splitter{
 		getE().setPath(getE().getPath().replace(".par" + j, ""));
 	}
 
+	/**
+	 * Aggiunge elementi all'interfaccia grafica
+	 * controlla tutti i file .zip da scomprimere e poi chiama la funzione unzip
+	 * per ognuno di questi file, poi elimina i file .par di scarto 
+	 */
 	public void Unsplit() {
 		getBarPanel().remove(getSplitLabel());
 		getBarPanel().remove(getProgressBar());

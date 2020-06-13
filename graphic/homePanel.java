@@ -27,6 +27,9 @@ public class homePanel extends JPanel implements ActionListener, Window{
 	private setupFrame setUpFrame;
 	private Thread myThread;
 
+	/**
+	 * Costruttore
+	 */
 	public homePanel() {
 		super(new BorderLayout());
 	}
@@ -66,11 +69,18 @@ public class homePanel extends JPanel implements ActionListener, Window{
 		}
 	}
 
+	/**
+	 * stampa una stringa
+	 * @param str un stringa da stampare
+	 */
 	public void print(String str) {
 		log.append(str + nl);
 		log.setCaretPosition(log.getDocument().getLength());
 	}
 
+	/**
+	 * Mostra l'interfaccia
+	 */
 	public void showGUI() {
 		myTableModel = new MyTableModel(q);
 		myTable = new JTable(myTableModel);

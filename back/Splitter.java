@@ -34,17 +34,12 @@ public class Splitter {
 	private long lunghezzaTmp;
 	private long percentuale;
 
-	public Splitter() {
-		this.pathOut = file.getParent();
-
-		System.out.println("f" + file.getAbsolutePath());
-		System.out.println("path out " + pathOut);
-
-		this.parti = 3;
-		this.grandezza = file.length()/parti;
-		this.resto = file.length()%parti;
-	}
-
+	/**
+	 * Costruttore della classe
+	 * @param element l'elemento di file che si vuole splittare o unplittare
+	 * @param p il numero di parti o la grandezza delle parti che si vogliono splittare
+	 */
+	
 	public Splitter(Element element, int p) {
 
 		this.e = element;
@@ -91,6 +86,9 @@ public class Splitter {
 		}
 	}
 
+	/**
+	 * Divide il file
+	 */
 	public void Split() {
 
 		try{
@@ -137,6 +135,9 @@ public class Splitter {
 		print("Fine Split");
 	}
 
+	/**
+	 * Ricompone il file
+	 */
 	public void Unsplit() {
 		
 		BarPanel.remove(splitLabel);
