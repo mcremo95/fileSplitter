@@ -13,14 +13,14 @@ import back.myR;
 import back.Queue;
 import back.Element;
 
-public class homePanel extends JPanel implements ActionListener{
+public class homePanel extends JPanel implements ActionListener, Window{
 
 	private static final long serialVersionUID = 1L;
 	protected static JTable myTable;
 	private TableModel myTableModel;
 	private JScrollPane scrollPaneTable,scrollPaneLog;
 	private JPanel buttonPanel;
-	private JButton addButton, removeButton, startButton;
+	private JButton addButton, removeButton, startButton, modifyButton;
 	private Queue q = new Queue();
 	private JTextArea log;
 	private final static String nl = "\n";
@@ -71,7 +71,7 @@ public class homePanel extends JPanel implements ActionListener{
 		log.setCaretPosition(log.getDocument().getLength());
 	}
 
-	public void showPanel() {
+	public void showGUI() {
 		myTableModel = new MyTableModel(q);
 		myTable = new JTable(myTableModel);
 		buttonPanel = new JPanel();
@@ -91,9 +91,12 @@ public class homePanel extends JPanel implements ActionListener{
 		removeButton.addActionListener(this);
 		startButton = new JButton("Start");
 		startButton.addActionListener(this);
+		modifyButton = new JButton("Modifica");
+		modifyButton.addActionListener(this);
 
 		buttonPanel.add(addButton);
 		buttonPanel.add(removeButton);
+		buttonPanel.add(modifyButton);
 		buttonPanel.add(startButton);
 
 		this.add(scrollPaneTable, BorderLayout.PAGE_START);

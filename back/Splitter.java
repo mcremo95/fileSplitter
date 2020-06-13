@@ -91,7 +91,7 @@ public class Splitter {
 		}
 	}
 
-	public void split() {
+	public void Split() {
 
 		try{
 			fileIn = new FileInputStream(e.getPath());
@@ -137,7 +137,15 @@ public class Splitter {
 		print("Fine Split");
 	}
 
-	public void unsplit() {
+	public void Unsplit() {
+		
+		BarPanel.remove(splitLabel);
+		BarPanel.remove(progressBar);
+		splitLabel = new JLabel("Unsplit");
+		BarPanel.add(splitLabel);
+		BarPanel.add(progressBar);
+		
+		
 		print(e.getPath());
 		this.file = new File(e.getPath());
 		this.grandezza = file.length();

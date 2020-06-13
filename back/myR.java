@@ -6,6 +6,10 @@ public class myR implements Runnable{
 	private Splitter s;
 	private String extension;
 
+	/**
+	 * Costruttore che inizializza un oggetto myR
+	 * @param e Un elemento e che contiene le informazione sul file
+	 */
 	public myR(Element e) {
 		this.element = e;
 		this.extension = e.getNameFile().substring(e.getNameFile().lastIndexOf("."));
@@ -17,19 +21,19 @@ public class myR implements Runnable{
 		if(element.getMode().contentEquals("Split(Default)")
 				|| element.getMode().contentEquals("Split(Parti)")) {
 			s = new Splitter(element, element.getGrandezza());
-			s.split();
+			s.Split();
 		}
 
 		else if(element.getMode().contentEquals("Unsplit")){
 			
 			if(extension.contentEquals(".par1")) {
 				s = new Splitter(element, element.getGrandezza());
-				s.unsplit();
+				s.Unsplit();
 			}
 			
 			else if(extension.contentEquals(".zip")) {
 				s = new Zipper(element, element.getGrandezza());
-				s.unsplit();
+				s.Unsplit();
 			}
 			
 			else {
@@ -39,7 +43,7 @@ public class myR implements Runnable{
 
 		else if(element.getMode().contentEquals("Zip")){
 			s = new Zipper(element, element.getGrandezza());
-			s.split();
+			s.Split();
 		}
 	}
 }

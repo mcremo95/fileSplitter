@@ -15,7 +15,7 @@ import javax.swing.JTextField;
 import back.Element;
 import java.io.File;
 
-public class setupFrame extends JFrame implements ActionListener{
+public class setupFrame extends JFrame implements ActionListener, Window{
 
 	private static final long serialVersionUID = 1L;
 	private JFileChooser fileChooser;

@@ -2,7 +2,7 @@ package graphic;
 
 import javax.swing.*;
 
-public class homeFrame extends JFrame{
+public class homeFrame extends JFrame implements Window{
 
 	private static final long serialVersionUID = 1L;
 	private homePanel hp;
@@ -10,7 +10,7 @@ public class homeFrame extends JFrame{
 	public homeFrame() {
 		super("Splitter");
 		hp = new homePanel();
-		hp.showPanel();
+		hp.showGUI();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	

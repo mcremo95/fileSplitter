@@ -1,8 +1,6 @@
 package back;
 
 import java.awt.BorderLayout;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -43,6 +41,8 @@ public class Zipper extends Splitter{
 
 				while ((lunghezza = zipIn.read(getB())) > 0) {
 					getFileOut().write(getB(), 0, lunghezza);
+					setLunghezzaTmp(lunghezza + getLunghezzaTmp());
+					progressBarZip.setValue((int) getLunghezzaTmp()/(int) getPercentuale());
 				}
 				getFileOut().close();
 				entry = zipIn.getNextEntry();
@@ -76,6 +76,8 @@ public class Zipper extends Splitter{
 
 			while((lunghezza = getFileIn().read(getB())) >= 0) {
 				zipOut.write(getB(), 0, lunghezza);
+				setLunghezzaTmp(lunghezza + getLunghezzaTmp());
+				progressBarZip.setValue((int) getLunghezzaTmp()/(int) getPercentuale());
 			}
 
 			zipOut.close();
@@ -90,7 +92,7 @@ public class Zipper extends Splitter{
 		print("Ho finito di comprimere il file " + name);
 	}
 
-	public void split(){
+	public void Split(){
 		int i = 0;
 		int j = 1;
 		setFile(new File(getE().getPath()));
@@ -100,16 +102,9 @@ public class Zipper extends Splitter{
 		getBarPanel().add(progressBarZip);
 		getContenitore().add(getFilePanel(), BorderLayout.PAGE_END);
 
-		super.split();
+		super.Split();
 
 		print("controllo i file");
-		try {
-			Thread.sleep(2000);
-		}
-		
-		catch(Exception e) {
-			print("qualcosa è andato storto " + e);
-		}
 		
 		getE().setPath(getE().getPath() + ".par1");
 		
@@ -120,10 +115,13 @@ public class Zipper extends Splitter{
 			print("prima di cambiare ");
 			print("name è: " + getE().getPath());
 			getE().setPath(getE().getPath().replace(".par" + i, ".par" + j));
+			setGrandezza(getFile().length() + getGrandezza());
 			print("dopo il cambiamento ");
 			print("name è: " + getE().getPath());
 			setFile(new File(getE().getPath()));
 		}
+		
+		setPercentuale(getGrandezza()/100);
 
 		print("in totale ci sono " + i + " file par");
 		getE().setPath(getE().getPath().replace(".par" + j, ""));
@@ -133,9 +131,29 @@ public class Zipper extends Splitter{
 			print(" j = " + j + " i = " + i);
 			Zip(getE().getPath() + ".par" + j);
 		}
+		
+
+		getE().setPath(getE().getPath() + ".par1");
+		setFile(new File(getE().getPath()));
+		j = 1;
+		
+		while(getFile().exists()) {
+			getFile().delete();
+			getE().setPath(getE().getPath().replace(".par" + j, ".par" + ++j));
+			print(getE().getPath());
+			setFile(new File(getE().getPath()));
+		}
+		
+		getE().setPath(getE().getPath().replace(".par" + j, ""));
 	}
 
-	public void unsplit() {
+	public void Unsplit() {
+		getBarPanel().remove(getSplitLabel());
+		getBarPanel().remove(getProgressBar());
+		setSplitLabel(new JLabel("Unsplit"));
+		getBarPanel().add(getSplitLabel());
+		getBarPanel().add(getProgressBar());
+		
 		this.zipLabel = new JLabel("Unzip");
 		getBarPanel().add(zipLabel);
 		getBarPanel().add(progressBarZip);
@@ -144,16 +162,19 @@ public class Zipper extends Splitter{
 		File f = new File(getE().getPath());
 		int i = 0;
 		int j = i + 1;
-
+		
 		while(f.exists()) {
 			i++;
 			j++;
 			print("Il valore di i è: " + i + " mentre j è " + j);
 			print("name è: " + getE().getPath());
 			getE().setPath(getE().getPath().replace(".par" + i, ".par" + j));
+			setGrandezza(getFile().length() + getGrandezza());
 			f = new File(getE().getPath());
 		}
 
+		setPercentuale(getGrandezza()/100);
+		
 		print("in totale ci sono " + i + " file par");
 		getE().setPath(getE().getPath().replace(".par" + j + ".zip", ""));
 		print("name è " + getE().getPath() + " j = " + j + " i = " + i);
@@ -164,6 +185,22 @@ public class Zipper extends Splitter{
 			getE().setPath(getE().getPath().replace(".par" + j + ".zip", ".par" + i + ".zip"));
 		}
 		getE().setPath(getE().getPath() + ".par1");
-		super.unsplit();
+		super.Unsplit();
+		
+		getE().setPath(getE().getPath().replace(".par" + ++i, ".par1"));
+		print(getE().getPath());
+		
+		f = new File(getE().getPath());
+		j = 1;
+		
+		while(f.exists()) {
+			f.delete();
+			getE().setPath(getE().getPath().replace(".par" + j, ".par" + ++j));
+			f = new File(getE().getPath());
+		}
+		
+		getE().setPath(getE().getPath().replace(".par" + j, ".par1"));
+		getE().setPath(getE().getPath() + ".zip");
+		
 	}
 }
