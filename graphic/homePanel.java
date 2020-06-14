@@ -21,10 +21,10 @@ public class homePanel extends JPanel implements ActionListener, Window{
 	private JScrollPane scrollPaneTable,scrollPaneLog;
 	private JPanel buttonPanel;
 	private JButton addButton, removeButton, startButton, modifyButton;
-	private Queue q = new Queue();
+	private static Queue q = new Queue();
 	private JTextArea log;
 	private final static String nl = "\n";
-	private setupFrame setUpFrame;
+	private SetupFrame setUpFrame;
 	private Thread myThread;
 
 	/**
@@ -39,7 +39,7 @@ public class homePanel extends JPanel implements ActionListener, Window{
 		if (e.getSource() == addButton) {
 			print("Clicked add");
 
-			setUpFrame = new setupFrame();
+			setUpFrame = new SetupFrame();
 			setUpFrame.showGUI();
 		}
 
@@ -65,6 +65,25 @@ public class homePanel extends JPanel implements ActionListener, Window{
 				f = q.getElements().get(z);
 				myThread = new Thread(new myR(f));
 				myThread.start();
+			}
+			MyTableModel model = (MyTableModel)myTable.getModel();
+			for(int z = q.getElements().size()-1; z > -1; z--) {
+				q.Dequeue(z);
+				model.fireTableDataChanged();
+			}
+		}
+
+		if (e.getSource() == modifyButton) {
+			int r = myTable.getSelectedRow();
+			Element f;
+
+			if(r !=- 1) {
+				MyTableModel model = (MyTableModel)myTable.getModel();
+				f = q.getElements().get(r);
+				setUpFrame = new SetupFrame(f.getPath(), f.getMode(),
+						f.getGrandezza(), r);
+				setUpFrame.showGUI();
+				model.fireTableDataChanged();
 			}
 		}
 	}
@@ -112,5 +131,13 @@ public class homePanel extends JPanel implements ActionListener, Window{
 		this.add(scrollPaneTable, BorderLayout.PAGE_START);
 		this.add(scrollPaneLog, BorderLayout.CENTER);
 		this.add(buttonPanel, BorderLayout.PAGE_END);
+	}
+
+	public static Queue getQ() {
+		return q;
+	}
+
+	public static void setQ(Queue q) {
+		homePanel.q = q;
 	}
 }
