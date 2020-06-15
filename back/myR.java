@@ -13,7 +13,6 @@ public class myR implements Runnable{
 	public myR(Element e) {
 		this.element = e;
 		this.extension = e.getNameFile().substring(e.getNameFile().lastIndexOf("."));
-		System.out.println("extension: " + extension);
 	}
 
 	public void run() {

@@ -89,7 +89,7 @@ public class Splitter {
 	/**
 	 * Divide il file
 	 */
-	public void Split() {
+	public synchronized void Split() {
 
 		try{
 			fileIn = new FileInputStream(e.getPath());
@@ -138,7 +138,7 @@ public class Splitter {
 	/**
 	 * Ricompone il file
 	 */
-	public void Unsplit() {
+	public synchronized void Unsplit() {
 		
 		BarPanel.remove(splitLabel);
 		BarPanel.remove(progressBar);

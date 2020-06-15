@@ -111,7 +111,7 @@ public class Zipper extends Splitter{
 	 * controlla tutti i file .par da comprimere e poi chiama la funzione zip
 	 * per ognuno di questi file infine elimina i file .par di scarto 
 	 */
-	public void Split(){
+	public synchronized void Split(){
 		int i = 0;
 		int j = 1;
 		setFile(new File(getE().getPath()));
@@ -130,13 +130,8 @@ public class Zipper extends Splitter{
 		while(getFile().exists()) {
 			i++;
 			j++;
-			print("Il valore di i = " + i + " mentre j = " + j);
-			print("prima di cambiare ");
-			print("name è: " + getE().getPath());
 			getE().setPath(getE().getPath().replace(".par" + i, ".par" + j));
 			setGrandezza(getFile().length() + getGrandezza());
-			print("dopo il cambiamento ");
-			print("name è: " + getE().getPath());
 			setFile(new File(getE().getPath()));
 		}
 		
@@ -144,13 +139,10 @@ public class Zipper extends Splitter{
 
 		print("in totale ci sono " + i + " file par");
 		getE().setPath(getE().getPath().replace(".par" + j, ""));
-		print("name è " + getE().getPath() + " j = " + j + " i = " + i);
 
 		for(j = 1; j <= i; j++) {
-			print(" j = " + j + " i = " + i);
 			Zip(getE().getPath() + ".par" + j);
 		}
-		
 
 		getE().setPath(getE().getPath() + ".par1");
 		setFile(new File(getE().getPath()));
@@ -159,7 +151,6 @@ public class Zipper extends Splitter{
 		while(getFile().exists()) {
 			getFile().delete();
 			getE().setPath(getE().getPath().replace(".par" + j, ".par" + ++j));
-			print(getE().getPath());
 			setFile(new File(getE().getPath()));
 		}
 		
@@ -171,7 +162,7 @@ public class Zipper extends Splitter{
 	 * controlla tutti i file .zip da scomprimere e poi chiama la funzione unzip
 	 * per ognuno di questi file, poi elimina i file .par di scarto 
 	 */
-	public void Unsplit() {
+	public synchronized void Unsplit() {
 		getBarPanel().remove(getSplitLabel());
 		getBarPanel().remove(getProgressBar());
 		setSplitLabel(new JLabel("Unsplit"));
@@ -190,8 +181,6 @@ public class Zipper extends Splitter{
 		while(f.exists()) {
 			i++;
 			j++;
-			print("Il valore di i è: " + i + " mentre j è " + j);
-			print("name è: " + getE().getPath());
 			getE().setPath(getE().getPath().replace(".par" + i, ".par" + j));
 			setGrandezza(getFile().length() + getGrandezza());
 			f = new File(getE().getPath());
@@ -201,10 +190,8 @@ public class Zipper extends Splitter{
 		
 		print("in totale ci sono " + i + " file par");
 		getE().setPath(getE().getPath().replace(".par" + j + ".zip", ""));
-		print("name è " + getE().getPath() + " j = " + j + " i = " + i);
-
+		
 		for(j = 1; j <= i; j++) {
-			print(" j = " + j + " i = " + i);
 			Unzip(getE().getPath() + ".par" + j + ".zip");
 			getE().setPath(getE().getPath().replace(".par" + j + ".zip", ".par" + i + ".zip"));
 		}
