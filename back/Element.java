@@ -23,19 +23,6 @@ public class Element {
 		}
 		
 		/**
-		 * Questo costruttore inizializza grandezza a 100
-		 * @param p path del file
-		 * @param n nome del file
-		 * @param m modalità di split
-		 */
-		public Element(String p, String n, String m) {
-			this.path = p;
-			this.nameFile = n;
-			this.mode = m;
-			this.grandezza = 100;
-		}
-		
-		/**
 		 * @return the path
 		 */
 		public String getPath() {

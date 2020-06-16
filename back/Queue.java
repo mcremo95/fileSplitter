@@ -25,7 +25,7 @@ public class Queue {
 	 * Rimuove un elemento dalla coda passando un ElementFile
 	 * @param e ElementFile da rimuovere
 	 */
-	public void Dequeue(Element e) {
+	public void Dequeue(Generic<String, Integer> e) {
 		System.out.println("Denque avviata");
 		for(int i = 0; i < elements.size(); i++) {
 			if(e.getPath().equals(elements.get(i).getPath())){

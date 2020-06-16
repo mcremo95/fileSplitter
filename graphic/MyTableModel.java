@@ -2,6 +2,7 @@ package graphic;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.Vector;
+import back.Generic;
 import back.Queue;
 import back.Element;
 
@@ -38,8 +39,8 @@ public class MyTableModel extends AbstractTableModel{
 		return getValueAt(0, col).getClass();
 	}
 
-	public void setValueAt(Vector<Element> v, String mode, int dim, int row) {
-		Element e = v.elementAt(row);
+	public void setValueAt(Vector<Generic<String, Integer>> v, String mode, int dim, int row) {
+		Generic<String, Integer> e = v.elementAt(row);
 		e.setMode(mode);
 		e.setGrandezza(dim);
 		fireTableDataChanged();
